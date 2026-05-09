@@ -12,14 +12,14 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 // Tool: Maven
-                sh 'mvn clean install -DskipTests'
+                sh 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
                 // Tool: Maven Surefire (mvn test)
-                sh 'mvn test || true'
+                sh 'npm test || true' // Allows pipeline to continue despite test failures
             }
             post {
                 always {
@@ -36,14 +36,15 @@ pipeline {
         stage('Generate Coverage Report') {
             steps {
                 // Tool: JaCoCo / Maven coverage plugin
-                sh 'mvn test jacoco:report || true'
+		// Ensure coverage report exists
+                sh 'npm run coverage || true'
             }
         }
 
-        stage('Security Scan') {
+        stage('NPM Audit(Security Scan)') {
             steps {
                 // Tool: Trivy filesystem scan
-                sh 'trivy fs . || true'
+                sh 'npm audit || true'// This will show known CVEs in the output
             }
             post {
                 always {
