@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Tool: Git
+                // Tool can be used: Git
                 git branch: 'main', url: 'https://github.com/Saipriya753/8.2CDevSecOps.git'
             }
         }
